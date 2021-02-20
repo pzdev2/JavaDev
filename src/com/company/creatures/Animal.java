@@ -1,8 +1,10 @@
 package com.company.creatures;
 
+import com.company.database.Connector;
 import com.company.devices.Saleable;
 
 import java.io.File;
+import java.sql.*;
 
 public abstract class Animal implements Saleable, Feedable {
 
@@ -13,10 +15,16 @@ public abstract class Animal implements Saleable, Feedable {
     public Boolean isAlive = true;
     public String name;
     File pic;
-    private Double weight = 10.0;
+    private Double weight;
 
     public Animal(String species) {
         this.species = species;
+    }
+
+    public Animal(String species, String name, Double weight) {
+        this.species = species;
+        this.name = name;
+        this.weight = weight;
     }
 
     public void feed() {
@@ -70,5 +78,11 @@ public abstract class Animal implements Saleable, Feedable {
     @Override
     public void sell(Human seller, Human buyer, Double price) throws Exception {
 
+    }
+
+    public void save() throws SQLException {
+        String sql = "insert into animal (species, name, weight)" +
+                " values ('" + this.species + "', '" + this.name + "', " + this.weight + ")";
+        Connector.executeSql(sql);
     }
 }

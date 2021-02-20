@@ -2,10 +2,7 @@ package com.company.database;
 
 import com.company.Configuration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Connector {
 
@@ -22,5 +19,9 @@ public class Connector {
     public static void executeSql(String sql) throws SQLException {
 
         CONN.createStatement().execute(sql);
+    }
+
+    public static ResultSet executeQuery(String sql) throws SQLException {
+        return getStatement().executeQuery(sql);
     }
 }

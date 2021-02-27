@@ -1,10 +1,5 @@
 package com.company;
 
-import com.company.creatures.Human;
-import com.company.database.Connector;
-import com.company.devices.Car;
-
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,16 +7,58 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Map<String, Car> cars = new HashMap<>();
+        Map<String, Integer> countries = new HashMap<>();
 
-        cars.put("Maluch", new Car(2010, "Fiat", "126p", "red", 10000.00));
-        cars.put("Rekin", new Car(2020, "BMW", "E21", "black", 100000.00));
-        cars.put("Jazz", new Car(2011, "Honda", "Jazz", "red", 20000.00));
-        cars.put("Ceed", new Car(2021, "Kia", "Ceed", "white", 50000.00));
+        countries.put("Poland", 312696);
+        countries.put("Russia", 17098242);
+        countries.put("Ghana", 238533);
+        countries.put("Australia", 7682300);
+        countries.put("Singapore", 693);
 
-        cars.entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Car>comparingByKey())
-                .forEach(System.out::println);
+        System.out.println("Country with the largest area: " + selectTheLargestArea(countries));
+        System.out.println("Country with the smallest area: " + selectTheSmallestArea(countries));
+
+    }
+
+    private static <K, V extends Comparable<V> > Map.Entry<K, V>
+    selectTheLargestArea(Map<K, V> map)
+    {
+        Map.Entry<K, V> entryWithMaxValue = null;
+
+        for (Map.Entry<K, V> currentEntry : map.entrySet()) {
+
+            if (
+                    entryWithMaxValue == null
+
+                            || currentEntry.getValue()
+                            .compareTo(entryWithMaxValue.getValue())
+                            > 0) {
+
+                entryWithMaxValue = currentEntry;
+            }
+        }
+
+        return entryWithMaxValue;
+    }
+
+    private static <K, V extends Comparable<V> > Map.Entry<K, V>
+    selectTheSmallestArea(Map<K, V> map)
+    {
+        Map.Entry<K, V> entryWithMinValue = null;
+
+        for (Map.Entry<K, V> currentEntry : map.entrySet()) {
+
+            if (
+                    entryWithMinValue == null
+
+                            || currentEntry.getValue()
+                            .compareTo(entryWithMinValue.getValue())
+                            < 0) {
+
+                entryWithMinValue = currentEntry;
+            }
+        }
+
+        return entryWithMinValue;
     }
 }

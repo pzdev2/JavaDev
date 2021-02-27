@@ -1,6 +1,6 @@
 package com.company;
 
-import com.company.creatures.Animal;
+import com.company.creatures.Human;
 import com.company.database.Connector;
 
 import java.sql.SQLException;
@@ -15,6 +15,6 @@ public class Main {
             throwables.printStackTrace();
         }
 
-        Animal.findAll().forEach(System.out::println);
+        Human.findAllHumans().forEach(System.out::println);
     }
 }

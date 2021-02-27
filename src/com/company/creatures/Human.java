@@ -4,8 +4,11 @@ import com.company.database.Connector;
 import com.company.devices.Car;
 import com.company.devices.Phone;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Human extends Animal {
 
@@ -148,9 +151,22 @@ public class Human extends Animal {
         }
     }
 
-    public void save() throws SQLException {
-        String sql = "insert into human (species, first_name, last_name, salary)" +
-                " values ('" + this.species + "', '" + this.firstName + "', '" + this.lastName + "', " + this.salary + ")";
-        Connector.executeSql(sql);
+    public static List<Human> findAllHumans() {
+        List<Human> humanList = new LinkedList<>();
+        String getHumans = "select * from human;";
+        try {
+            ResultSet humans = Connector.executeQuery(getHumans);
+
+            while (humans.next()) {
+                String species = humans.getString("species");
+                String firstName = humans.getString("first_name");
+                String lastName = humans.getString("last_name");
+                Double salary = humans.getDouble("salary");
+                humanList.add(new Human(species, firstName, lastName, salary));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return humanList;
     }
 }

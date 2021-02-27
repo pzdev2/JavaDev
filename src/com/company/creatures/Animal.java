@@ -103,4 +103,9 @@ public class Animal implements Saleable, Feedable {
         return animalList;
     }
 
+    public void save() throws SQLException {
+        String sql = "insert into animal (species, name, weight)" +
+                " values ('" + this.species + "', '" + this.name + "', " + this.weight + ")";
+        Connector.executeSql(sql);
+    }
 }

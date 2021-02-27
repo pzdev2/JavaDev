@@ -47,8 +47,8 @@ public class Human extends Animal {
         this.garage = new Car[GARAGE_DEFAULT_SIZE];
     }
 
-    public Human(String species, String firstName, String lastName, Double salary) {
-        super(species);
+    public Human(String firstName, String lastName, Double salary) {
+        super(HOMO_SAPIENS);
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
@@ -158,15 +158,20 @@ public class Human extends Animal {
             ResultSet humans = Connector.executeQuery(getHumans);
 
             while (humans.next()) {
-                String species = humans.getString("species");
                 String firstName = humans.getString("first_name");
                 String lastName = humans.getString("last_name");
                 Double salary = humans.getDouble("salary");
-                humanList.add(new Human(species, firstName, lastName, salary));
+                humanList.add(new Human(firstName, lastName, salary));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return humanList;
+    }
+
+    public void save() throws SQLException {
+        String sql = "insert into human (species, first_name, last_name, salary)" +
+                " values ('" + this.species + "', '" + this.firstName + "', '" + this.lastName + "', " + this.salary + ")";
+        Connector.executeSql(sql);
     }
 }

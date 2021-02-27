@@ -1,20 +1,20 @@
 package com.company;
 
-import com.company.devices.Car;
+import com.company.creatures.Animal;
+import com.company.database.Connector;
 
-import java.util.*;
+import java.sql.SQLException;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Map<String, Car> cars = new TreeMap<>();
+        try {
+            Connector.connect();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
-        cars.put("Maluch", new Car(2010, "Fiat", "126p", "red", 10000.00));
-        cars.put("Rekin", new Car(2020, "BMW", "E21", "black", 100000.00));
-        cars.put("Jazz", new Car(2011, "Honda", "Jazz", "red", 20000.00));
-        cars.put("Ceed", new Car(2021, "Kia", "Ceed", "white", 50000.00));
-
-        cars.forEach((k, v) -> System.out.println(k));
+        Animal.findAll().forEach(System.out::println);
     }
 }

@@ -3,10 +3,11 @@ package com.company.creatures;
 import com.company.database.Connector;
 import com.company.devices.Saleable;
 
-import java.io.File;
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
-public abstract class Animal implements Saleable, Feedable {
+public class Animal implements Saleable, Feedable {
 
     final static Double MIN_WEIGHT = 2.0;
     final static Double DEFAULT_FOOD_WEIGHT = 1.0;
@@ -14,7 +15,6 @@ public abstract class Animal implements Saleable, Feedable {
     final public String species;
     public Boolean isAlive = true;
     public String name;
-    File pic;
     private Double weight;
 
     public Animal(String species) {
@@ -28,9 +28,9 @@ public abstract class Animal implements Saleable, Feedable {
     }
 
     public void feed() {
-        if (this.species == "dog") {
+        if (this.species.equals("dog")) {
             feed(2.0);
-        } else if (this.species == "cat") {
+        } else if (this.species.equals("cat")) {
             feed(0.5);
         } else if (this instanceof FarmAnimal) {
             feed(5.0);
@@ -70,19 +70,37 @@ public abstract class Animal implements Saleable, Feedable {
         this.weight = newWeight;
     }
 
-    public String toString() {
-        return this.species + " " + this.name + " isAlive: " + this.isAlive;
-    }
+    @Override
+    public void sell(Human seller, Human buyer, Double price) {
 
+    }
 
     @Override
-    public void sell(Human seller, Human buyer, Double price) throws Exception {
-
+    public String toString() {
+        return "Animal{" +
+                "species='" + species + '\'' +
+                ", name='" + name + '\'' +
+                ", weight=" + weight +
+                '}';
     }
 
-    public void save() throws SQLException {
-        String sql = "insert into animal (species, name, weight)" +
-                " values ('" + this.species + "', '" + this.name + "', " + this.weight + ")";
-        Connector.executeSql(sql);
+    public static List<Animal> findAll() {
+        List<Animal> animalList = new LinkedList<>();
+        String getAnimals = "select * from animal;";
+        try {
+            ResultSet animals = Connector.executeQuery(getAnimals);
+
+            while (animals.next()) {
+                String species = animals.getString("species");
+                String name = animals.getString("name");
+                Double weight = animals.getDouble("weight");
+                animalList.add(new Animal(species, name, weight));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return animalList;
     }
+
 }
